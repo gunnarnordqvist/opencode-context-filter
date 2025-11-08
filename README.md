@@ -67,21 +67,19 @@ Retains only:
 
 ## How It Works
 
-```
-User: opencode
-     ↓
-opencode-wrapper.sh (checks proxy status)
-     ↓
-     ├─ Proxy running → Launch OpenCode
-     └─ Not running → Start proxy → Launch OpenCode
-             ↓
-OpenCode → http://localhost:11435/v1 (proxy)
-             ↓
-Proxy filters context for llama3.2:1b
-             ↓
-Proxy → http://localhost:11434 (Ollama)
-             ↓
-Response → OpenCode
+```mermaid
+flowchart TD
+    A[User: opencode] --> B[opencode-wrapper.sh]
+    B -->|Check proxy status| C{Proxy running?}
+    C -->|Yes| D[Launch OpenCode]
+    C -->|No| E[Start proxy]
+    E --> D
+    D --> F[OpenCode sends request]
+    F --> G[http://localhost:11435/v1<br/>Proxy]
+    G --> H[Filter context for llama3.2:1b]
+    H --> I[http://localhost:11434<br/>Ollama]
+    I --> J[Generate response]
+    J --> K[Response → OpenCode]
 ```
 
 ## Testing
